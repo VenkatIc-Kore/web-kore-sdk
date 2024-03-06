@@ -1008,6 +1008,16 @@ parseSocketMessage(msgString:string){
         if (!tempData.message[0].cInfo) {
           tempData.message[0].cInfo = {};
         }
+        try {
+          if (tempData.message[0].component.payload.text) {
+            let templateText = tempData.message[0].component.payload.text;
+            templateText = templateText.replace(/&quot;/g, '"');
+            templateText = JSON.parse(templateText);
+            tempData.message[0].component = templateText;
+          }
+        } catch (err) {
+          tempData.message[0].component = tempData.message[0].component;
+        }
         if (tempData.message[0].component && !tempData.message[0].component.payload.text) {
           try {
             tempData.message[0].component = JSON.parse(tempData.message[0].component.payload);
