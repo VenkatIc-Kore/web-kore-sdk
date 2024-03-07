@@ -1013,9 +1013,10 @@ parseSocketMessage(msgString:string){
             let templateText = tempData.message[0].component.payload.text;
             templateText = templateText.replace(/&quot;/g, '"');
             templateText = JSON.parse(templateText);
-            console.log("Rendered by the client");
-            console.log("Rendered Time: ", new Date().toString());
-            tempData.message[0].component = templateText;
+            if (templateText?.type === "template" && templateText.payload) {
+              console.log("Rendered by the client at: ", new Date().toString());
+              tempData.message[0].component = templateText;
+            }
           }
         } catch (err) {
           tempData.message[0].component = tempData.message[0].component;
