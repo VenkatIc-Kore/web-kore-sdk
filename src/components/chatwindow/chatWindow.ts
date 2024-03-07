@@ -1013,6 +1013,8 @@ parseSocketMessage(msgString:string){
             let templateText = tempData.message[0].component.payload.text;
             templateText = templateText.replace(/&quot;/g, '"');
             templateText = JSON.parse(templateText);
+            console.log("Rendered by the client");
+            console.log("Rendered Time: ", new Date().toString());
             tempData.message[0].component = templateText;
           }
         } catch (err) {
