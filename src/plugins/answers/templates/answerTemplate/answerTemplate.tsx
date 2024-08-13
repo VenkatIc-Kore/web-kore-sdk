@@ -11,29 +11,85 @@ export function Answers(props: any) {
         msgData: msgData,
         hostInstance: hostInstance
     }
+    const searchResultsSettings = hostInstance.config['searchResultsSettings'];
     const [answersObj, setAnswersObj]: any = useState({ "generative": { "answerFragments": [], "sources": [] }});
     const [modelType, setModelType] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [imageObj, setImageObj] = useState({url:'',isShow:false});
-    const [searchResultObj, setSearchResultObj] = useState({"isEnable":true,"count":3, "type":'list', "data":[],"showResults":false});
+    const [searchResultObj, setSearchResultObj] = useState({...searchResultsSettings, "data":[],"showResults":false});
 
     useEffect(() => {
         const results = messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data[0]?.snippet_content;
         const templateType = messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data[0].snippet_type;
         setModelType(templateType);
-        let searchResultData  = messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data;
+        // const  chunkResults  = messageObj?.msgData?.message[0]?.component?.payload?.chunk_result;
+        const chunkResults =  {
+            "extractive": [
+              
+            ],
+            "generative": [
+              {
+                "_index": "answer_index",
+                "_type": "_doc",
+                "_id": "n6ihE5EBbS6PFLEDBZ61",
+                "_score": 0.2725873,
+                "_ignored": [
+                  "chunkContent.normalize",
+                  "chunkText.normalize",
+                  "chunkText.keyword",
+                  "chunkContent.keyword"
+                ],
+                "_source": {
+                  "sourceId": "fs-bf596cb6-4494-5c5d-b87a-29f764d2d279",
+                  "recordTitle": "On call Tracker - Responsibilities.pdf",
+                  "pageNumber": 2,
+                  "docId": "fc-4dd6ad07-5043-51f4-a3fb-66ff0abc9bf5",
+                  "recordUrl": "https://sit-xo.kore.ai/api/getMediaStream/findly/f-a9461dab-4502-5ee5-bc92-d6e7c55d5376.pdf?n=311082751&s=IktCUVZDeHM1SjJLeHpOSG9VcGVBOVByVXdlQ2VLNW5oMFA3Z2VsbEIvTHc9Ig$$#page=2",
+                  "searchIndexId": "sidx-724ca9a8-c707-512b-9a4c-0ea857bf1595",
+                  "sourceAcl": [
+                    "*"
+                  ],
+                  "chunkType": "Text",
+                  "chunkId": "chk-6f162561-4124-4829-99b3-a6952938203d",
+                  "createdOn": "2024-08-02T14:52:31.438Z",
+                  "chunkContent": "chunkText : Deployment Support The on-call engineer should provide support for cloud and Installer deployments,   (WIP) chunkTitle :  sourceName : Default Directory sourceType : file",
+                  "sourceUrl": "https://sit-xo.kore.ai/api/getMediaStream/findly/f-a9461dab-4502-5ee5-bc92-d6e7c55d5376.pdf?n=311082751&s=IktCUVZDeHM1SjJLeHpOSG9VcGVBOVByVXdlQ2VLNW5oMFA3Z2VsbEIvTHc9Ig$$",
+                  "chunkText": "Deployment Support The on-call engineer should provide support for cloud and Installer deployments, working alongside the story owner to create a deployment document and ensuring a smooth deployment process. They should also work closely with the release manager to create the on-prem step upgrade release document.   Post-Deployment Sign Off After deployment, the on-call engineer should provide an on-call sign-off of the build, confirming its stability and availability of all the services.   Documentation   The on-call engineer is responsible for generating comprehensive documentation regarding all incidents, including details about their root causes and corresponding fixes. They should also maintain a log of the incident history and troubleshooting references to assist future on-call engineers.   Accountability The on-call engineer is accountable for their actions and decisions during their on-call shifts. They should promptly report any mistakes or incidents that occur, ensuring transparency.   (WIP)",
+                  "sourceType": "file",
+                  "chunkMeta": {
+                    
+                  },
+                  "chunkTitle": "",
+                  "extractionMethodType": "token",
+                  "extractionMethod": "text",
+                  "sourceName": "Default Directory",
+                  "extractionStrategy": "Default Strategy",
+                  "fileType": "pdf",
+                  "chunkQualified": true,
+                  "score": 0.2725873,
+                  "sentToLLM": true,
+                  "usedInAnswer": true,
+                  "chunk_id": "chk-6f162561-4124-4829-99b3-a6952938203d"
+                },
+                "vector_search_score": 0.2725873,
+                "keyword_search_score": 1.4658772,
+                "positional_score": 0.016666666666666666
+              }
+            ]
+          }
+        let searchResultData = chunkResults?.[chunkResults?.generative?.length?'generative':'extractive'] || [];
           // const searchResultData  = messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data.slice(1, 3); 
-       [{type:'web',desc:"Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide. Links Getting Started Pricing Renew Blog / News Real Estate Investors Blog Real Estate Agents Blog My Account Contact Us Customer Support Partner With Us PropStream Features Instant Comparables Targeted Marketing Owner Contact Information ADU and Rehab Calculators Automated List Marketing Tiered Postcard Pricing Skip Tracing iOS and Android Mobile App Clients Real Estate Investors Real Estate Agents Real Estate Brokers Contractors Property Managers Lenders and Loan Originators Appraisers Resources PropStream Help Mobile App PropStream Academy Real Estate Glossary of Terms Webinars Frequently Asked Questions Our Community Help Videos About PropStream About Us Newsletter Subscription Supporting Fair Housingand Accessibility Brand Assets Careers © Copyright 2024 PropStream.com - All Rights Reserved | Privacy Policy | Terms of Use | Cookie Policy | Don't Sell My Info",title:"Flipping Houses and Taxes: What You Need to Know"},
-        {type:'xlsx',desc:"To learn more about how PropStream can help you generate more business through targeted lead generation and receive a free trial, stop by booth #24 at Tom Ferry Success Summit or reach out to support@propstream.com.  About PropStream: PropStream leads the real estate data industry with the most robust, detailed datasets available. In business since 2006, PropStream has data for over 155 million properties nationwide and hundreds of filtering combinations to help real estate investors, agents, and brokers find the best off-market leads in the least amount of time. With built-in marketing tools, PropStream has everything motivated real estate professionals need to build marketing lists and make a pitch in one convenient location. PropStream was acquired by Stewart Title Co. in November 2021 and has been named a HousingWire Tech 100 Honoree in 2021, 2022, and 2023. Share    Published by PropStream August 15, 2023 Real Estate Investors 11.4.2022 PropStream How to Follow Fair Housing Guidelines as a Real Estate Professional Real Estate Investors 06.22.2022 PropStream 4 Benefits of Being Both an Investor and Agent PropStream 26457 Rancho Parkway South Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide.",title:"PropStream to Exhibit at Tom Ferry Success Summit 2023!"},
-        {type:'pdf',desc:"26457 Rancho Parkway South Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide. Links Getting Started Pricing Renew Blog / News Real Estate Investors Blog Real Estate Agents Blog My Account Contact Us Customer Support Partner With Us PropStream Features Instant Comparables Targeted Marketing Owner Contact Information ADU and Rehab Calculators Automated List Marketing Tiered Postcard Pricing Skip Tracing iOS and Android Mobile App Clients Real Estate Investors Real Estate Agents Real Estate Brokers Contractors Property Managers Lenders and Loan Originators Appraisers Resources PropStream Help Mobile App PropStream Academy Real Estate Glossary of Terms Webinars Frequently Asked Questions Our Community Help Videos About PropStream About Us Newsletter Subscription Supporting Fair Housingand Accessibility Brand Assets Careers © Copyright 2024 PropStream.com - All Rights Reserved | Privacy Policy | Terms of Use | Cookie Policy | Don't Sell My Info",title:"How to Set Up Alerts and Automations In List Automator - PropStream Help Video Library"}].forEach((item) => {
-        let webdata  = JSON.parse(JSON.stringify(messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data));
-        webdata[0].snippet_content[0].sources[0].source_type = item?.type;
-        webdata[0].snippet_content[0].sources[0].title = item?.title;
-        webdata[0].snippet_content[0].answer_fragment = item?.desc;
-         searchResultData  =searchResultData.concat(webdata); 
-       })
-       searchResultData  = searchResultData.slice(1, 4); 
-        setSearchResultObj({"isEnable":true,"count":3, "type":'list', "data":searchResultData, "showResults":false});
+    //    [{type:'web',desc:"Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide. Links Getting Started Pricing Renew Blog / News Real Estate Investors Blog Real Estate Agents Blog My Account Contact Us Customer Support Partner With Us PropStream Features Instant Comparables Targeted Marketing Owner Contact Information ADU and Rehab Calculators Automated List Marketing Tiered Postcard Pricing Skip Tracing iOS and Android Mobile App Clients Real Estate Investors Real Estate Agents Real Estate Brokers Contractors Property Managers Lenders and Loan Originators Appraisers Resources PropStream Help Mobile App PropStream Academy Real Estate Glossary of Terms Webinars Frequently Asked Questions Our Community Help Videos About PropStream About Us Newsletter Subscription Supporting Fair Housingand Accessibility Brand Assets Careers © Copyright 2024 PropStream.com - All Rights Reserved | Privacy Policy | Terms of Use | Cookie Policy | Don't Sell My Info",title:"Flipping Houses and Taxes: What You Need to Know"},
+    //     {type:'xlsx',desc:"To learn more about how PropStream can help you generate more business through targeted lead generation and receive a free trial, stop by booth #24 at Tom Ferry Success Summit or reach out to support@propstream.com.  About PropStream: PropStream leads the real estate data industry with the most robust, detailed datasets available. In business since 2006, PropStream has data for over 155 million properties nationwide and hundreds of filtering combinations to help real estate investors, agents, and brokers find the best off-market leads in the least amount of time. With built-in marketing tools, PropStream has everything motivated real estate professionals need to build marketing lists and make a pitch in one convenient location. PropStream was acquired by Stewart Title Co. in November 2021 and has been named a HousingWire Tech 100 Honoree in 2021, 2022, and 2023. Share    Published by PropStream August 15, 2023 Real Estate Investors 11.4.2022 PropStream How to Follow Fair Housing Guidelines as a Real Estate Professional Real Estate Investors 06.22.2022 PropStream 4 Benefits of Being Both an Investor and Agent PropStream 26457 Rancho Parkway South Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide.",title:"PropStream to Exhibit at Tom Ferry Success Summit 2023!"},
+    //     {type:'pdf',desc:"26457 Rancho Parkway South Lake Forest, California 92630 PropStream is The Most Trusted All-in-one Solution That Provides Comprehensive Real Estate Data Nationwide. Links Getting Started Pricing Renew Blog / News Real Estate Investors Blog Real Estate Agents Blog My Account Contact Us Customer Support Partner With Us PropStream Features Instant Comparables Targeted Marketing Owner Contact Information ADU and Rehab Calculators Automated List Marketing Tiered Postcard Pricing Skip Tracing iOS and Android Mobile App Clients Real Estate Investors Real Estate Agents Real Estate Brokers Contractors Property Managers Lenders and Loan Originators Appraisers Resources PropStream Help Mobile App PropStream Academy Real Estate Glossary of Terms Webinars Frequently Asked Questions Our Community Help Videos About PropStream About Us Newsletter Subscription Supporting Fair Housingand Accessibility Brand Assets Careers © Copyright 2024 PropStream.com - All Rights Reserved | Privacy Policy | Terms of Use | Cookie Policy | Don't Sell My Info",title:"How to Set Up Alerts and Automations In List Automator - PropStream Help Video Library"}].forEach((item) => {
+    //     let webdata  = JSON.parse(JSON.stringify(messageObj?.msgData?.message[0]?.component?.payload?.answer_payload?.center_panel?.data));
+    //     webdata[0].snippet_content[0].sources[0].source_type = item?.type;
+    //     webdata[0].snippet_content[0].sources[0].title = item?.title;
+    //     webdata[0].snippet_content[0].answer_fragment = item?.desc;
+    //      searchResultData  =searchResultData.concat(webdata); 
+    //    })
+       searchResultData  = searchResultData.slice(0, searchResultsSettings?.searchResultsCount); 
+        setSearchResultObj({...searchResultsSettings, "data":searchResultData, "showResults":false});
         
         setAnswersObj((prevState: any) => ({ ...prevState}));
         updateGenerativePayload(results);
@@ -69,13 +125,13 @@ export function Answers(props: any) {
 
     const showMoreResults = async (event:any,data:any) => {
          if(!data.showResults) {
-                setSearchResultObj(preState=>({...preState,showResults:true}));
-                if(data?.type !=='overlay')event?.currentTarget?.parentElement?.remove();
+                setSearchResultObj((preState:any)=>({...preState,showResults:true}));
+                if(data?.templateType !=='overlay')event?.currentTarget?.parentElement?.remove();
             }
       };
 
     const closeOverlayModel = ()=>{
-        setSearchResultObj(preState=>({...preState,showResults:false}));
+        setSearchResultObj((preState:any)=>({...preState,showResults:false}));
     }
 
 
@@ -138,7 +194,7 @@ export function Answers(props: any) {
                 )
             }
             {
-                (searchResultObj?.isEnable && searchResultObj?.count>0) &&
+                (searchResultObj?.isEnabled && searchResultObj?.searchResultsCount>0) &&
                 <Fragment>
                 <div class="sa-see-more-results-block">
                     <a class="sa-see-more-results-btn" onClick={($event)=>showMoreResults($event,searchResultObj)}>See More Results</a>

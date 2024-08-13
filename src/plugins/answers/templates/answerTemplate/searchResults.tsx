@@ -29,11 +29,11 @@ export function SearchResults(props: any): any {
 
     const searchEvent = (event: any) => {
         let searchText = event.target.value.trim();
-        let filteredData = searchText?.length ? propsData?.data?.filter((item: any) => (item?.snippet_content[0]?.sources[0]?.title?.toLowerCase()).includes(searchText.toLowerCase()) || (item?.snippet_content[0]?.answer_fragment?.toLowerCase()).includes(searchText?.toLowerCase())) : propsData?.data;
+        let filteredData = searchText?.length ? propsData?.data?.filter((item: any) => (item?._source?.recordTitle?.toLowerCase()).includes(searchText.toLowerCase()) || (item?._source?.chunkText?.toLowerCase()).includes(searchText?.toLowerCase())) : propsData?.data;
         setOverlayAnswersObj((prevState: any) => (filteredData));
     }
     let seachResultsTemp;
-    switch (propsData?.type) {
+    switch (propsData?.templateType) {
         case 'overlay':
             seachResultsTemp = <div class="sa-search-results-block overlay-popup">
                 <div className="sa-answer-overlay-block">
@@ -112,14 +112,14 @@ export function SearchListTemplate(props: any): any {
     const listTemp = <div className="sa-search-results-list-container">
         <div className="sa-search-title-block">
             <div className="sa-icon-title">
-                {propsData?.snippet_content[0]?.sources?.length && propsData?.snippet_content[0]?.sources[0]?.source_type && <div className="sa-search-icon">
-                    <SearchResultsSvgIcons type={propsData?.snippet_content[0]?.sources[0]?.source_type} />
+                { propsData?._source?.fileType && <div className="sa-search-icon">
+                    <SearchResultsSvgIcons type={propsData?._source?.fileType} />
                 </div>}
-                {propsData?.snippet_content[0]?.sources?.length && <div className="sa-search-title">
-                    {propsData?.snippet_content[0]?.sources[0]?.title}</div>}</div>
-            {propsData?.snippet_content[0]?.sources?.length && propsData?.snippet_content[0]?.sources[0]?.page_no && <div className="sa-search-pageno">Pg {propsData?.snippet_content[0]?.sources[0]?.page_no}</div>}
+                {propsData?._source?.recordTitle && <div className="sa-search-title">
+                    {propsData?._source?.recordTitle}</div>}</div>
+            {propsData?._source?.pageNumber && <div className="sa-search-pageno">Pg {propsData?._source?.pageNumber}</div>}
         </div>
-        <div className="sa-search-desc">{propsData?.snippet_content[0]?.answer_fragment}</div>
+        <div className="sa-search-desc">{propsData?._source?.chunkText}</div>
     </div>
 
     return listTemp;
